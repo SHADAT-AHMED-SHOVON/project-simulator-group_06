@@ -1,13 +1,14 @@
 <?php
 session_start();
 
-// --- FAKE LOGIN FOR TASK 3 TESTING ---
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['user_id'] = 1; // Assuming User ID 1 is a valid customer
-    $_SESSION['role'] = 'customer';
-    $_SESSION['name'] = 'Rahim (Test Customer)';
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'customer') {
+    
+    if(isset($_GET['page']) && strpos($_GET['page'], 'api_') !== false) {
+        die(json_encode(['success' => false, 'message' => 'Please login first!']));
+    }
+    header("Location: /medicine_shovon/index.php?page=login");
+    exit;
 }
-// -------------------------------------
 
 require 'config.php';
 require 'models.php';
@@ -15,13 +16,10 @@ require 'controllers.php';
 
 $page = $_GET['page'] ?? 'home';
 
-// --- API ROUTES (AJAX) ---
 if ($page === 'api_cart_add') { apiAddToCart($conn); }
 elseif ($page === 'api_cart_update') { apiUpdateCart($conn); }
 elseif ($page === 'api_cart_remove') { apiRemoveCart($conn); }
 
-// --- PAGE ROUTES ---
-// --- PAGE ROUTES ---
 if ($page === 'home') { homeController($conn); }
 elseif ($page === 'cart') { cartController($conn); }
 elseif ($page === 'payment') { paymentController($conn); }

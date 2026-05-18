@@ -3,7 +3,7 @@
 <head><title>My Orders</title><link rel="stylesheet" href="style.css"></head>
 <body>
     <div class="navbar">
-        <div class="nav-left"><a href="index.php?page=home" style="color:#008c5e; font-weight:bold;">← Back to Shop</a></div>
+        <a href="/online_medicineshop/medicine_shovon/index.php?page=home" style="color: #008c5e; font-weight: bold; text-decoration: none;">← Back to Shop</a>
         <div class="nav-center"><h1>My Order History</h1></div>
         
     </div>

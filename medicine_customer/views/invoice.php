@@ -10,7 +10,7 @@
     <div class="container" style="max-width: 700px; margin: 40px auto; background:white; padding:30px; border-radius:8px; border:1px solid #ddd;">
         <div style="display:flex; justify-content:space-between; border-bottom:2px solid #eee; padding-bottom:15px; margin-bottom:20px;">
             <div>
-                <h2 style="color:#008c5e;">Online Medicine Shop</h2>
+                <h2 style="color:#008c5e;">CUREPOINT Pharmacy</h2>
                 <p style="color:#666; font-size:13px; margin-top:5px;">Order Date: <?= date('d M Y, h:i A', strtotime($order['order_date'] ?? 'now')) ?></p>
             </div>
             <div style="text-align:right;">

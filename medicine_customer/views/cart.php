@@ -19,9 +19,9 @@
 
     <div class="navbar">
         <div class="nav-left">
-            <a href="index.php?page=home" style="color: #008c5e; font-weight: bold; text-decoration: none; font-size: 16px;">← Back to Shop</a>
+            <a href="/online_medicineshop/medicine_shovon/index.php?page=home" style="color: #008c5e; font-weight: bold; text-decoration: none;">← Back to Shop</a>
         </div>
-        <div class="nav-center"><h1>Online Medicine Shop</h1></div>
+        <div class="nav-center"><h1>CUREPOINT Pharmacy</h1></div>
         
     </div>
 
