@@ -15,14 +15,11 @@ a {
     color: #008c5e;
 }
 
-/* Upper Bar (Navbar) */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /*background: linear-gradient(to right, #12131e 15%, #926EF6 50%, #12131e 90%);*/
     background: linear-gradient(to right, #12131e, #7362F3);
-    /*background: #12131e;*/
     padding: 15px 30px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     position: sticky;
@@ -58,7 +55,6 @@ a {
     font-weight: bold;
 }
 
-/* User Profile Widget */
 .user-widget {
     display: flex;
     align-items: center;
@@ -100,14 +96,11 @@ a {
     text-transform: uppercase;
 }
 
-/* Search & Filter Bar */
 .search-filter-bar {
     display: flex;
     gap: 50px;
     padding: 20px 30px;
-    /*background: linear-gradient(to right, #12131e 15%, #926EF6 50%, #12131e 90%);*/
     background: linear-gradient(to right, #12131e, #7362F3);
-    /*background: #7362F3;*/
     border-bottom: 1px solid #eee;
     margin-bottom: 20px;
 }
@@ -131,7 +124,6 @@ a {
     background: #fff;
 }
 
-/* Medicine Grid & Cards */
 .container {
     padding: 0 30px 40px;
     max-width: 1400px;
@@ -228,7 +220,6 @@ a {
     background: #006b48;
 }
 
-/* Forms & Utilities */
 .auth-container {
     max-width: 450px;
     margin: 50px auto;
