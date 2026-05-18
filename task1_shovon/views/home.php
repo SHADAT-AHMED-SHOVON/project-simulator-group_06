@@ -23,18 +23,26 @@
             <?php endif; ?>
         </div>
         <div class="nav-center">
-            <h1>Online Medicine Shop</h1>
+            <h1>CUREPOINT Pharmacy</h1>
             <p>Your Trusted Healthcare Partner</p>
         </div>
-        <div class="nav-right">
+        <div class="nav-right" style="display:flex; align-items:center; gap:15px;">
             <?php if(!isset($_SESSION['user_id'])): ?>
-                <a href="index.php?page=login" style="padding: 8px 15px; background: #008c5e; color: white; border-radius: 5px;">
-                    Login
-                </a>
+                <a href="index.php?page=login" style="font-weight:bold; color: white;">Login</a>
+                <a href="index.php?page=register" style="background:#008c5e; color:white; padding:8px 15px; border-radius:5px; font-weight:bold;">Sign Up</a>
             <?php else: ?>
-                <a href="index.php?page=logout" style="padding: 8px 15px; background: #cc1a1a; color: white; border-radius: 5px;">
-                    Logout
-                </a>
+                
+                <?php if($_SESSION['role'] === 'admin'): ?>
+                    <a href="/online_medicineshop/medicine_admin/index.php" style="background:#3182ce; color:white; padding:8px 15px; border-radius:5px; font-weight:bold;">⚙️ Manage</a>
+                <?php else: ?>
+                    <a href="/online_medicineshop/medicine_customer/index.php?page=orders" style="color: #008c5e; font-weight: bold; white-space: nowrap;">📦 Order List</a>
+    
+    <a href="/online_medicineshop/medicine_customer/index.php?page=cart" style="background:#008c5e; color:white; padding:10px 20px; border-radius:6px; font-weight:bold; display:flex; align-items:center; gap:8px; white-space: nowrap;">
+        🛒 My Cart <span id="cart-badge" style="background:white; color:#008c5e; padding:2px 8px; border-radius:12px; font-size:12px;"><?= $cart_count ?? 0 ?></span>
+    </a>
+                <?php endif; ?>
+
+                <a href="index.php?page=logout" style="background: #e53e3e; color: white; padding: 8px 15px; border-radius: 5px; font-weight: bold; text-decoration: none; display: inline-block;">Logout</a>
             <?php endif; ?>
         </div>
     </div>
@@ -71,18 +79,21 @@
                         <?php endif; ?>
                     </div>
                     <div class="med-details">
-                        <h3><?= htmlspecialchars($med['name']) ?></h3>
-                        <p><strong>Vendor:</strong> <?= htmlspecialchars($med['vendor_name']) ?></p>
-                        <p><strong>Category:</strong> <?= htmlspecialchars($med['category_name']) ?> <span class="badge"><?= ucfirst($med['category_type']) ?></span></p>
-                        <div class="med-price">৳<?= $med['price'] ?></div>
+                    <h3><?= htmlspecialchars($med['name']) ?></h3>
+                    <p><strong>Vendor:</strong> <?= htmlspecialchars($med['vendor_name']) ?></p>
+                    <p><strong>Category:</strong> <?= htmlspecialchars($med['category_name']) ?> <span class="badge"><?= ucfirst($med['category_type']) ?></span></p>
+                    <div class="med-price">৳<?= $med['price'] ?></div>
+                    <p style="font-size:11px; color:#666; margin-top:5px;"><strong>Stock:</strong> <?= $med['availability'] ?> units</p>
                     </div>
                 </div>
                 <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                <a href="#" onclick="alert('Not Done!'); return false;" class="btn-cart" style="background: #4299e1; text-align: center; display: block;">
-                    Edit Medicine
-                </a>
+                    <a href="/online_medicineshop/medicine_admin/index.php?page=admin_medicines&edit_id=<?= $med['id'] ?>" class="btn-cart" style="background: #3182ce; color: white; text-align: center; display: block; text-decoration: none; padding: 10px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer;">✏️ Edit Medicine</a>
                 <?php else: ?>
-                <button class="btn-cart" onclick="addToCart(<?= $med['id'] ?>)">Add to Cart</button>
+                    <?php if($med['availability'] > 0): ?>
+                        <button class="btn-cart" onclick="addToCart(<?= $med['id'] ?>, this)">Add to Cart</button>
+                    <?php else: ?>
+                        <button class="btn-cart" style="background:#ccc; cursor:not-allowed;" disabled>Out of Stock</button>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>
@@ -121,12 +132,53 @@
         filterCat.addEventListener('change', filterMedicines);
         filterVendor.addEventListener('change', filterMedicines); 
 
-        function addToCart(medId) {
+        function addToCart(medId, btnElement) {
             <?php if(!isset($_SESSION['user_id'])): ?>
-                alert("You Nedd to Login First!");
+                // If not logged in
+                alert("You need to login first!");
                 window.location.href = 'index.php?page=login';
+                
+            <?php elseif($_SESSION['role'] === 'admin'): ?>
+                // If Admin, redirect to edit page in Task 2
+                window.location.href = '/medicine_admin/index.php?page=admin_medicines&edit_id=' + medId;
+                
             <?php else: ?>
-                alert("Not Done!");
+                // If Customer, send AJAX request to Task 3 API
+                let fd = new FormData();
+                fd.append('medicine_id', medId);
+                fd.append('quantity', 1);
+
+                let originalText = btnElement.innerText;
+                btnElement.innerText = "Adding...";
+                btnElement.style.opacity = "0.7";
+
+                fetch('/online_medicineshop/medicine_customer/index.php?page=api_cart_add', { method: 'POST', body: fd })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        btnElement.innerText = "Added! ✔";
+                        btnElement.style.background = "#059669";
+
+                        let badge = document.getElementById('cart-badge');
+                        if(badge) badge.innerText = parseInt(badge.innerText) + 1;
+
+                        let toast = document.getElementById('cartToast');
+                        if(toast) {
+                            toast.style.display = 'block';
+                            setTimeout(() => { toast.style.display = 'none'; }, 1000);
+                        }
+
+                        setTimeout(() => {
+                            btnElement.innerText = originalText;
+                            btnElement.style.background = "#008c5e";
+                            btnElement.style.opacity = "1";
+                        }, 2000);
+                    } else {
+                        alert('Error adding to cart: ' + data.message);
+                        btnElement.innerText = originalText;
+                        btnElement.style.opacity = "1";
+                    }
+                }).catch(error => console.error('Error:', error));
             <?php endif; ?>
         }
     </script>
