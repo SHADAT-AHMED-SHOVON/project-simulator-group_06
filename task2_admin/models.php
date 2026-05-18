@@ -1,5 +1,5 @@
 <?php
-
+// Dashboard Stats
 function admin_getDashboardStats($conn) {
     return [
         'medicines' => mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c FROM medicines"))['c'],
@@ -9,7 +9,7 @@ function admin_getDashboardStats($conn) {
     ];
 }
 
-
+// Categories
 function admin_getCategories($conn) {
     return mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM categories ORDER BY id DESC"), MYSQLI_ASSOC);
 }
@@ -21,7 +21,7 @@ function admin_addCategory($conn, $name, $type) {
     return $res;
 }
 
-
+// Medicines
 function admin_getMedicines($conn) {
     return mysqli_fetch_all(mysqli_query($conn, "SELECT m.*, c.name as cat_name FROM medicines m JOIN categories c ON m.category_id = c.id ORDER BY m.id DESC"), MYSQLI_ASSOC);
 }
@@ -42,7 +42,7 @@ function admin_deleteMedicine($conn, $id) {
     return $res;
 }
 
-
+// Customers & Orders
 function admin_getCustomers($conn) {
     return mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM users WHERE role='customer' ORDER BY id DESC"), MYSQLI_ASSOC);
 }
@@ -66,7 +66,7 @@ function admin_updateOrder($conn, $id, $status) {
     return $res;
 }
 
-
+// --- Fetch single medicine for Edit ---
 function admin_getMedicineById($conn, $id) {
     $stmt = mysqli_prepare($conn, "SELECT * FROM medicines WHERE id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $id);
@@ -76,7 +76,7 @@ function admin_getMedicineById($conn, $id) {
     return $res;
 }
 
-
+// --- Update Price, Stock and Image ---
 function admin_updateMedicinePartial($conn, $id, $price, $stock, $img = null) {
     if ($img) {
         $stmt = mysqli_prepare($conn, "UPDATE medicines SET price=?, availability=?, image_path=? WHERE id=?");

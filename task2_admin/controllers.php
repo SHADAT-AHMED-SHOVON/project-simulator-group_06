@@ -14,11 +14,21 @@ function admin_categoryCtrl($conn) {
 }
 
 function admin_medicineCtrl($conn) {
+    // 1. Delete Logic
     if (isset($_GET['delete_id'])) {
-        admin_deleteMedicine($conn, $_GET['delete_id']);
-        header("Location: index.php?page=admin_medicines"); exit;
+    $delete_id = intval($_GET['delete_id']);
+    
+    $delete_query = mysqli_query($conn, "DELETE FROM medicines WHERE id = $delete_id");
+    
+    if ($delete_query) {
+        header("Location: index.php?page=admin_medicines");
+        exit;
+    } else {
+        echo "<script>alert('Failed to delete medicine! It might be linked to an existing order.');</script>";
     }
+}
 
+    // 2. Update Logic (Edit Price, Stock, Image)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_medicine'])) {
         $img = null;
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -29,6 +39,7 @@ function admin_medicineCtrl($conn) {
         header("Location: index.php?page=admin_medicines"); exit;
     }
 
+    // 3. Add New Medicine Logic
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_medicine'])) {
         $img = null;
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -39,6 +50,7 @@ function admin_medicineCtrl($conn) {
         header("Location: index.php?page=admin_medicines"); exit;
     }
 
+    // Fetch single medicine if Edit button is clicked
     $edit_data = null;
     if (isset($_GET['edit_id'])) {
         $edit_data = admin_getMedicineById($conn, $_GET['edit_id']);

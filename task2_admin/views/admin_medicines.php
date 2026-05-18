@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Manage Medicines</title>
+    <meta charset="UTF-8"><title>Manage Medicines</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Image Thumbnail Style */
         .med-img-box {
-            width: 50px;
-            height: 50px;
-            border-radius: 6px;
-            object-fit: cover;
-            border: 1px solid #ccc;
-            background: #f0f0f0;
-            display: block;
+            width: 50px; height: 50px; border-radius: 6px; object-fit: cover; 
+            border: 1px solid #ccc; background: #f0f0f0; display: block;
         }
-        .form-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
-            margin-bottom: 20px;
-        }
+        .form-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <h2>Admin</h2>
+        
+    <div style="padding: 30px 30px; border-bottom: 2px solid #3182ce; margin-bottom: 20px;">
+    <h3 style="color: #4ade80; margin: 0; font-size: 18px;"><?= htmlspecialchars($_SESSION['name'] ?? 'Admin') ?></h3>
+    <span style="color: #94a3b8; font-size: 12px; font-weight: bold; text-transform: uppercase;">
+    <?= htmlspecialchars($_SESSION['role'] ?? 'ADMIN') ?>
+    </span>
+    </div>
+
         <a href="index.php?page=admin_dashboard">Dashboard</a>
         <a href="index.php?page=admin_categories">Categories</a>
         <a href="index.php?page=admin_medicines">Medicines</a>
         <a href="index.php?page=admin_customers">Customers</a>
         <a href="index.php?page=admin_orders">Orders</a>
+        <div class="home">
+        <a href="/online_medicineshop/medicine_shovon/index.php?page=home" style="color: #cbd5e1; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 10px 15px; border-radius: 5px; background: rgba(255,255,255,0.05); font-weight: bold; transition: 0.3s;">
+        🏠 Back to Home
+        </a>
+        </div>
     </div>
 
     <div class="main-content">
@@ -102,15 +102,7 @@
                 <h2>Medicine List</h2>
                 <table class="result-table">
                     <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Vendor</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th>Action</th>
-                        </tr>
+                        <tr><th>Image</th><th>Name</th><th>Category</th><th>Vendor</th><th>Price</th><th>Stock</th><th>Action</th></tr>
                     </thead>
                     <tbody>
                         <?php foreach($medicines as $med): ?>
