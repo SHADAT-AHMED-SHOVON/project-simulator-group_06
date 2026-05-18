@@ -10,10 +10,10 @@
             <a href="index.php?page=home" style="font-weight:bold;">← Back to Home</a>
         </div>
         <div class="nav-center">
-            <h1>Online Medicine Shop</h1>
+            <h1>CUREPOINT Pharmacy</h1>
         </div>
         <div class="nav-right">
-            <a href="index.php?page=logout" style="color:red;">Logout</a>
+            <a href="index.php?page=logout" style="background: #e53e3e; color: white; padding: 8px 15px; border-radius: 5px; font-weight: bold; text-decoration: none; display: inline-block;">Logout</a>
         </div>
     </div>
     

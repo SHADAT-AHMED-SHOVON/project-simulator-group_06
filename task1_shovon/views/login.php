@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login - Online Medicine Shop</title>
+    <title>Login - CUREPOINT Pharmacy</title>
     <link rel="stylesheet" href="style.css?v=<?php echo filemtime('style.css'); ?>">
 </head>
 <body>
     <div class="navbar">
         <div class="nav-center">
-            <h1>Online Medicine Shop</h1>
+            <h1>CUREPOINT Pharmacy</h1>
         </div>
     </div>
     
@@ -25,6 +25,10 @@
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" name="password" required>
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" name="remember_me" id="remember_me" style="width: auto;">
+                <label for="remember_me" style="margin-bottom: 0; font-weight: normal; cursor: pointer;">Keep me logged in</label>
             </div>
             <button type="submit" class="btn-submit">Login</button>
         </form>

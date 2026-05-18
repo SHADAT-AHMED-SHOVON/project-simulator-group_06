@@ -19,8 +19,23 @@ require 'config.php';
 require 'models.php';
 require 'controllers.php';
 
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_user'])) {
+    $cookie_user_id = mysqli_real_escape_string($conn, $_COOKIE['remember_user']);
+    $user_query = mysqli_query($conn, "SELECT id, name, role FROM users WHERE id = '$cookie_user_id'");
+    
+    if ($user_query && mysqli_num_rows($user_query) > 0) {
+        $user = mysqli_fetch_assoc($user_query);
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['name'] = $user['name'];
+        $_SESSION['role'] = $user['role'];
+        $_SESSION['last_activity'] = time(); 
+    }
+}
+
+
 $page = $_GET['page'] ?? 'home';
 
+// Routing
 if ($page === 'home') {
     homeController($conn);
 } elseif ($page === 'login') {
@@ -32,6 +47,9 @@ if ($page === 'home') {
 } elseif ($page === 'logout') {
     session_unset();
     session_destroy();
+
+    setcookie('remember_user', '', time() - 3600, '/'); 
+    
     header("Location: index.php?page=home");
     exit;
 } else {

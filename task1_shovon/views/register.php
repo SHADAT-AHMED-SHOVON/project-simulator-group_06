@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Signup - Online Medicine Shop</title>
+    <title>Signup - CUREPOINT Pharmacy</title>
     <link rel="stylesheet" href="style.css?v=<?php echo filemtime('style.css'); ?>">
 </head>
 <body>
     <div class="navbar">
         <div class="nav-center">
-            <h1>Online Medicine Shop</h1>
+            <h1>CUREPOINT Pharmacy</h1>
         </div>
     </div>
 

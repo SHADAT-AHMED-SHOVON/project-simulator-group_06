@@ -34,6 +34,11 @@ function loginController($conn) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['name'] = $user['name'];
             $_SESSION['role'] = $user['role'];
+
+            if (isset($_POST['remember_me'])) {
+                setcookie('remember_user', $user['id'], time() + (86400 * 30), "/");
+            }
+
             header("Location: index.php?page=home");
             exit;
         } else {
@@ -46,13 +51,32 @@ function loginController($conn) {
 function homeController($conn) {
     $categories = mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM categories"), MYSQLI_ASSOC);
     
-    $medicines = mysqli_fetch_all(mysqli_query($conn, "SELECT m.*, c.name as category_name, c.category_type FROM medicines m JOIN categories c ON m.category_id = c.id ORDER BY m.id DESC"), MYSQLI_ASSOC);
-    
-    $current_user = null;
-    if(isset($_SESSION['user_id'])) {
-        $current_user = getUserById($conn, $_SESSION['user_id']);
+    $medicines_query = mysqli_query($conn, "SELECT m.*, c.name as category_name, c.category_type FROM medicines m JOIN categories c ON m.category_id = c.id ORDER BY m.id DESC");
+    if($medicines_query) {
+        $medicines = mysqli_fetch_all($medicines_query, MYSQLI_ASSOC);
+    } else {
+        $medicines = mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM medicines ORDER BY id DESC"), MYSQLI_ASSOC);
     }
     
+    $cart_count = 0;
+    $current_user = null; 
+
+    if(isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+        $user_query = mysqli_query($conn, "SELECT * FROM users WHERE id = $user_id");
+        if($user_query) {
+            $current_user = mysqli_fetch_assoc($user_query);
+        }
+
+        if($_SESSION['role'] === 'customer') {
+            $cart_query = mysqli_query($conn, "SELECT SUM(quantity) as total FROM cart WHERE user_id = $user_id");
+            if($cart_query) {
+                $cart_data = mysqli_fetch_assoc($cart_query);
+                $cart_count = $cart_data['total'] ?? 0;
+            }
+        }
+    }
+
     require 'views/home.php';
 }
 
